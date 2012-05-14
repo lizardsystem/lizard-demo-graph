@@ -1,12 +1,12 @@
 $(document).ready(function(){
- 
+
     $.ajax({
         url: "data/metingen.json",
         method: 'GET',
         dataType: 'json',
         success: onOutboundReceived
     });
- 
+
     function onOutboundReceived(series) {
         var length = series.length;
         var finalData = series;
@@ -35,15 +35,15 @@ $(document).ready(function(){
 		tickSize: [2, "day"]},
 	    selection: { mode: "x" }
         };
-	var placeholder = $("#placeholder");  
-	
+	var placeholder = $("#placeholder");
+
 	placeholder.bind("plotselected", function (event, ranges) {
             $("#selection").text(ranges.xaxis.from.toFixed(1) + " to " + ranges.xaxis.to.toFixed(1));
 	    //alert("tttt");
-            var zoom = $("#zoom").attr("checked");
-	    alert(zoom);
+            //var zoom = $("#zoom").attr("checked");
+            var zoom = true;
             if (zoom)
-		plot = $.plot(placeholder, data,
+		plot = $.plot(placeholder, [data, data2, data3],
                               $.extend(true, {}, options, {
 				  xaxis: { min: ranges.xaxis.from, max: ranges.xaxis.to }
                               }));
@@ -52,7 +52,7 @@ $(document).ready(function(){
 	placeholder.bind("plotunselected", function (event) {
             $("#selection").text("");
 	});
-    
+
 	var plot = $.plot(placeholder, [data, data2, data3], options);
 
 	$("#clearSelection").click(function () {
@@ -63,5 +63,5 @@ $(document).ready(function(){
             plot.setSelection({ xaxis: { from: x_min, to: x_max } });
 	});
     }
-    
+
 });
