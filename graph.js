@@ -8,6 +8,7 @@ $(document).ready(function(){
     });
  
     function onOutboundReceived(series) {
+        console.log(series);
         var length = series.length;
         var finalData = series;
         var options = {
