@@ -1,11 +1,11 @@
 $(document).ready(function(){
  
     $.ajax({
-                url: "data/metingen.json",
-                method: 'GET',
-                dataType: 'json',
-                success: onOutboundReceived
-            });
+        url: "data/metingen.json",
+        method: 'GET',
+        dataType: 'json',
+        success: onOutboundReceived
+    });
  
     function onOutboundReceived(series) {
         var length = series.length;
@@ -15,6 +15,6 @@ $(document).ready(function(){
             points: { show: true, hoverable:true },
             grid: { hoverable: true, clickable: true }
         };
-        $.plot($("#placeholder), finalData, options);
+        $.plot($("#placeholder"), finalData, options);
     }
 });
