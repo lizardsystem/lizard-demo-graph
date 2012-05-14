@@ -8,28 +8,60 @@ $(document).ready(function(){
     });
  
     function onOutboundReceived(series) {
-        console.log(series);
         var length = series.length;
         var finalData = series;
 	var data = [];
-	var x_max = new Date(finalData[4]["Datum + tijdstip"]).getTime();
+	var data2 = [];
+	var data3 = [];
+	var x_max = new Date(finalData[finalData.length-1]["Datum + tijdstip"]).getTime();
 	var x_min = new Date(finalData[0]["Datum + tijdstip"]).getTime();
 	for(var i in finalData){
 	    date = new Date(finalData[i]["Datum + tijdstip"]).getTime();
-	    console.log(i);
 	    data[i] =  [date, parseFloat(finalData[i].Waarde)];
-	    if (i > 5){ break;}
+	    data2[i] = [date, parseFloat(finalData[i].Waarde) - 0.12];
+	    data3[i] = [date, parseFloat(finalData[i].Waarde) + 0.12];
 	}
-	console.log(data);
         var options = {
-	    yaxis: { 
-		min: -1,
-		max: 1},
+	    colors: ['blue', 'red', 'green'],
+	    series: {
+		lines: { show: true },
+		points: { show: true }
+            },
+	    yaxis: {
+		min: -0.4,
+		max: 0.1},
 	    xaxis: {
-		max: x_max,
-		min: x_min},
-            lines: { show: true }
+		mode: "time",
+		tickSize: [2, "day"]},
+	    selection: { mode: "x" }
         };
-        $.plot($("#placeholder"), data, options);
+	var placeholder = $("#placeholder");  
+	
+	placeholder.bind("plotselected", function (event, ranges) {
+            $("#selection").text(ranges.xaxis.from.toFixed(1) + " to " + ranges.xaxis.to.toFixed(1));
+	    //alert("tttt");
+            var zoom = $("#zoom").attr("checked");
+	    alert(zoom);
+            if (zoom)
+		plot = $.plot(placeholder, data,
+                              $.extend(true, {}, options, {
+				  xaxis: { min: ranges.xaxis.from, max: ranges.xaxis.to }
+                              }));
+	});
+
+	placeholder.bind("plotunselected", function (event) {
+            $("#selection").text("");
+	});
+    
+	var plot = $.plot(placeholder, [data, data2, data3], options);
+
+	$("#clearSelection").click(function () {
+            plot.clearSelection();
+	});
+
+	$("#setSelection").click(function () {
+            plot.setSelection({ xaxis: { from: x_min, to: x_max } });
+	});
     }
+    
 });
