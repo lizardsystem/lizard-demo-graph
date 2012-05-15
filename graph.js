@@ -17,9 +17,9 @@ $(document).ready(function(){
 	var x_min = new Date(finalData[0]["Datum + tijdstip"]).getTime();
 	for(var i in finalData){
 	    date = new Date(finalData[i]["Datum + tijdstip"]).getTime();
-	    data[i] =  [date, parseFloat(finalData[i].Waarde)];
-	    data2[i] = [date, parseFloat(finalData[i].Waarde) - 0.12];
-	    data3[i] = [date, parseFloat(finalData[i].Waarde) + 0.12];
+	    data[i] =  [date, parseFloat(finalData[i].Waarde).toFixed(3)];
+	    data2[i] = [date, (parseFloat(finalData[i].Waarde) - 0.12).toFixed(3)];
+	    data3[i] = [date, (parseFloat(finalData[i].Waarde) + 0.12).toFixed(3)];
 	}
         var options = {
 	    colors: ['blue', 'red', 'green'],
@@ -43,11 +43,33 @@ $(document).ready(function(){
 	    //alert("tttt");
             //var zoom = $("#zoom").attr("checked");
             var zoom = true;
-            if (zoom)
+            if (zoom) {
+		var x_min_zoom, x_max_zoom, tick_size, diff_time, diff_hours;
+	        x_min_zoom = ranges.xaxis.from;
+	        x_max_zoom = ranges.xaxis.to;	
+	        tick_size = [];
+		diff_time = x_max_zoom - x_min_zoom;
+		diff_hours = (diff_time/(1000*60*60))
+		console.log("diff hours: " + diff_hours);
+		//console.log("x_man: " + x_max_zoom);
+		//console.log("diff: " + time_diff);
+	        if (diff_hours > 24*30) {
+		   $.merge(tick_size, [1, "month"]); 
+		} else if (diff_hours > 24) {
+		   $.merge(tick_size, [1, "day"]); 
+		} else if (diff_hours > 1) {
+		   $.merge(tick_size, [1, "hour"]);
+		} else {
+		   $.merge(tick_size, [15, "minute"]);
+		}
+		console.log(tick_size);
 		plot = $.plot(placeholder, [data, data2, data3],
                               $.extend(true, {}, options, {
-				  xaxis: { min: ranges.xaxis.from, max: ranges.xaxis.to }
+				  xaxis: { min: ranges.xaxis.from,
+					   max: ranges.xaxis.to,
+					   tickSize: tick_size }
                               }));
+	    }
 	});
 
 	placeholder.bind("plotunselected", function (event) {
@@ -88,6 +110,10 @@ $(document).ready(function(){
 
 	$("#setSelection").click(function () {
             plot.setSelection({ xaxis: { from: x_min, to: x_max } });
+	});
+
+	$("#refresh").click(function () {
+            plot = $.plot(placeholder, [data, data2, data3], options);
 	});
     }
 
