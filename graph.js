@@ -25,7 +25,7 @@ $(document).ready(function(){
 	    colors: ['blue', 'red', 'green'],
 	    series: {
 		lines: { show: true },
-		points: { show: true }
+		points: { show: true, hoverable: true }
             },
 	    yaxis: {
 		min: -0.4,
@@ -33,7 +33,8 @@ $(document).ready(function(){
 	    xaxis: {
 		mode: "time",
 		tickSize: [2, "day"]},
-	    selection: { mode: "x" }
+	    selection: { mode: "x" },
+            grid: { hoverable: true }
         };
 	var placeholder = $("#placeholder");
 
@@ -52,6 +53,32 @@ $(document).ready(function(){
 	placeholder.bind("plotunselected", function (event) {
             $("#selection").text("");
 	});
+
+        function showChartTooltip(x, y, contents) {
+            $('<div id="charttooltip">'+ contents + '</div>').css( {
+                position: 'absolute',
+                display: 'none',
+                top: y - 25,
+                left: x + 5,
+                border: '1px solid #bfbfbf',
+                padding: '2px',
+                'background-color': '#ffffff',
+                opacity: 1
+            }).appendTo("body").fadeIn(200);
+        }
+
+        placeholder.bind("plothover", function (event, pos, item) {
+            $("#x").text(pos.x.toFixed(2));
+            $("#y").text(pos.y.toFixed(2));
+            if (item) {
+                $("#charttooltip").remove();
+                var x = item.datapoint[0].toFixed(2),
+                y = item.datapoint[1].toFixed(2);
+                showChartTooltip(item.pageX, item.pageY,item.datapoint[1]);
+            } else {
+                $("#charttooltip").remove();
+            }
+        });
 
 	var plot = $.plot(placeholder, [data, data2, data3], options);
 
