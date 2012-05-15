@@ -1,13 +1,27 @@
+var jsonToCollection = function(series) {
+    //Return 2 dem. list with timeseries
+    var collection;
+    
+    for(var i in finalData){
+	date = new Date(finalData[i]["Datum + tijdstip"]).getTime();
+	data[i] =  [date, parseFloat(finalData[i].Waarde).toFixed(3)];
+	data2[i] = [date, (parseFloat(finalData[i].Waarde) - 0.12).toFixed(3)];
+	data3[i] = [date, (parseFloat(finalData[i].Waarde) + 0.12).toFixed(3)];
+    }
+    return collection;
+}
+
+
 var onOutboundReceived = function(series) {
     var length = series.length;
     var finalData = series;
     var data = [];
     var data2 = [];
     var data3 = [];
-    var x_max = new Date(finalData[finalData.length-1]["Datum + tijdstip"]).getTime();
-    var x_min = new Date(finalData[0]["Datum + tijdstip"]).getTime();
+    var x_max = finalData[finalData.length-1]["Timestamp"];
+    var x_min = finalData[0]["Timestamp"];
     for(var i in finalData){
-	date = new Date(finalData[i]["Datum + tijdstip"]).getTime();
+	var date = finalData[i]["Timestamp"];
 	data[i] =  [date, parseFloat(finalData[i].Waarde).toFixed(3)];
 	data2[i] = [date, (parseFloat(finalData[i].Waarde) - 0.12).toFixed(3)];
 	data3[i] = [date, (parseFloat(finalData[i].Waarde) + 0.12).toFixed(3)];
@@ -124,7 +138,7 @@ var onOutboundReceived = function(series) {
 $(document).ready(function(){
 
     $.ajax({
-        url: "data/metingen.json",
+        url: "data/metingen3.json",
         method: 'GET',
         dataType: 'json',
         success: onOutboundReceived
