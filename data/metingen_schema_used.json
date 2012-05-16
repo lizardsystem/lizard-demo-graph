@@ -1,0 +1,9 @@
+{
+	"start_timestamp": 12121212122,
+	"end_timestamp": 343434343434,
+	
+	"timeseries": [{
+		"location_id": "SAP3201",
+        	"location_name": "Ankaveense Stichting Polder",
+	        "events": [{"timestamp": 1336378865000.0, "waarde": "-0.22", "eenheid": "mNAP"},] }  ]
+}

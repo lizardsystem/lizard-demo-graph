@@ -1,0 +1,19 @@
+{
+	"start_timestamp": 12121212122,
+	"end_timestamp": 343434343434,        
+	"options": {
+  			"colors": ['blue', 'red', 'green'],
+  			"series": [{'type': 'line'}, {'type': 'line', 'hoverable': 'true'}, {'type': 'stacked-bar', 'aggregation': 'avg'}],
+  			"yaxis": { "min": -0.4, "max": 0.1},
+  			"xaxis": { "mode": "time", "tickSize": [2, "day"]},
+  			"selection": { "mode": "x" },
+  			"grid": { "hoverable": true }
+    	}
+	
+	"timeseries": [{
+		"location_id": "SAP3201",
+        	"location_name": "Ankaveense Stichting Polder",
+		"type": "line",
+		"color": "red",
+	        "events": [{"timestamp": 1336378865000.0, "waarde": "-0.22", "eenheid": "mNAP"},] }  ]
+}
